@@ -2,7 +2,6 @@
 
 CURRENTLY ONLY SUPPORTS EARTH ATMOSPHERIC ENTRY
 -
------------------------------------------------------------------------------------
 KEY
 -
 Purple = Downrange Distance on Earth from simulation start (m)
@@ -14,19 +13,6 @@ Red = Velocity (m/s)
 Green = Acceleration (m/s^2)
 
 X axis = time (s)
-
------------------------------------------------------------------------------------
-
-Coefficient of lift is set to 0 by default (ballistic reentry).
-
-Coefficient of lift can be inputed by changing the numerator value at line 48
-
-Eg:
-{L = 0/C} by default -----> {L = 0.1/C} as changed
-
------------------------------------------------------------------------------------
-
-Domain and range can be modified at lines 62 and 63 respectively.
 
 -----------------------------------------------------------------------------------
 Mathematics used:
