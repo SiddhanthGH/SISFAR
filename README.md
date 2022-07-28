@@ -5,15 +5,15 @@ CURRENTLY ONLY SUPPORTS EARTH ATMOSPHERIC ENTRY
 -----------------------------------------------------------------------------------
 KEY
 -
-Purple = Downrange Distance on Earth from simulation start
+Purple = Downrange Distance on Earth from simulation start (m)
 
-Blue = Height above mean sea level
+Blue = Height above mean sea level (m)
 
-Red = Velocity
+Red = Velocity (m/s)
 
-Green = Acceleration
+Green = Acceleration (m/s^2)
 
-X axis = time
+X axis = time (s)
 
 -----------------------------------------------------------------------------------
 
