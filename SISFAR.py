@@ -1,33 +1,33 @@
 import time
 import math
 from matplotlib import pyplot as plt
-from matplotlib import patches as mpatches
+import matplotlib.patches as mpatches
 
-W = float(input("Weight of craft: "))
+M = float(input("Mass of craft: "))
+W = M*9.81
 C = float(input("Drag coefficient of craft: "))
 A = float(input("Surface area of craft: "))
 L = float(input("Lift coefficient of craft: "))/C
-
 B = W/(C*A)
-
 h = float(input("Starting altitude in meters ASL: "))
 hi = h
 v = float(input("Initial velocity: "))
 gam = float(input("Degrees from local horizantal in degrees: "))
 gam = gam*(math.pi/180)
 g = 9.81
-
 dt = 0.1
-t = 0
-j = 0
-ran = 0
 
-plt.rcParams["figure.figsize"] = [10.00, 6.50]
+t = 0
+ran = 0
+n = 0
+
+plt.rcParams["figure.figsize"] = [14.00, 8.00]
 plt.rcParams["figure.autolayout"] = True
 
-while True:
+while h > 0.1:
     #Clock
         t = t + dt
+        n = n + 1
         x = t
     #Atmos Sim
         if h >= 25000:
@@ -63,25 +63,24 @@ while True:
         z = ran
         y = v
         j = acel
-        plt.xlim(0, t)
-        plt.ylim(0, ran+hi)
-        plt.xlabel("time / s")
-        plt.ylabel("Downrange / m | Altitude / m | Velocity / ms^-1 | Acceleration / ms^-2")
-        plt.grid()
-        plt.plot(x, z, marker="o", markersize=2, markeredgecolor="purple", markerfacecolor="purple")
-        plt.plot(x, o, marker="o", markersize=2, markeredgecolor="blue", markerfacecolor="blue")
-        plt.plot(x, y, marker="o", markersize=2, markeredgecolor="red", markerfacecolor="red")
-        plt.plot(x, j, marker="o", markersize=2, markeredgecolor="green", markerfacecolor="green")
-    #Off Check
-        if v <= 7:
-            break
-        if h < 0.1:
-            break
-plt.plot(x, z, marker="o", markersize=6, markeredgecolor="purple", markerfacecolor="purple", label="Downrange")
-plt.plot(x, o, marker="o", markersize=6, markeredgecolor="blue", markerfacecolor="blue", label="Altitude")
-plt.plot(x, y, marker="o", markersize=6, markeredgecolor="red", markerfacecolor="red", label="Velocity")
-plt.plot(x, j, marker="o", markersize=6, markeredgecolor="green", markerfacecolor="green", label="Acceleration")
-plt.legend()
+        if n%2 == 0:
+            plt.plot(x, z, marker="o", markersize=1, markeredgecolor="purple", markerfacecolor="purple")
+            plt.plot(x, o, marker="o", markersize=1, markeredgecolor="blue", markerfacecolor="blue")
+            plt.plot(x, y, marker="o", markersize=1, markeredgecolor="red", markerfacecolor="red")
+            plt.plot(x, j, marker="o", markersize=1, markeredgecolor="green", markerfacecolor="green")
+#Plot Graph
+plt.xlim()
+plt.ylim()
+plt.xlabel("time / s")
+plt.ylabel("Downrange / m | Altitude / m | Velocity / ms^-1 | Acceleration / ms^-2")
+plt.grid()
+#Add Legend
+red_patch = mpatches.Patch(color='red', label='Velocity')
+blue_patch = mpatches.Patch(color='blue', label='Altitude')
+green_patch = mpatches.Patch(color='green', label='Acceleration')
+purple_patch = mpatches.Patch(color='purple', label='Downrange')
+plt.legend(handles=[red_patch, blue_patch, green_patch, purple_patch])
+#Print Final Data
 print("time (s): ", t)
 print("velocity (m/s): ", v)
 print("Downrange (km): ", ran/1000)
