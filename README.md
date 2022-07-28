@@ -1,9 +1,9 @@
 # SISFAR (Step-wise Integrator Solution For Atmospheric Reentry)
 
 CURRENTLY ONLY SUPPORTS EARTH ATMOSPHERIC ENTRY
--
-KEY
--
+
+The program takes in initial orbital parameters and simulates, step by step, the trajectory of the spacecraft with those initial parameters through Earth's atmosphere, presenting the data in a graph post calculation.
+
 Purple = Downrange Distance on Earth from simulation start (m)
 
 Blue = Height above mean sea level (m)
