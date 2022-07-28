@@ -5,17 +5,18 @@ from matplotlib import pyplot as plt
 W = float(input("Weight of craft: "))
 C = float(input("Drag coefficient of craft: "))
 A = float(input("Surface area of craft: "))
+L = float(input("Lift coefficient of craft: "))/C
 
 B = W/(C*A)
-print(B)
 
 h = float(input("Starting altitude in meters ASL: "))
+hi = h
 v = float(input("Initial velocity: "))
 gam = float(input("Degrees from local horizantal in degrees: "))
 gam = gam*(math.pi/180)
 g = 9.81
 
-dt = float(input("Enter time step: "))
+dt = 0.1
 t = 0
 j = 0
 ran = 0
@@ -38,14 +39,17 @@ while True:
             elif h < 11000:
                 T = 15.04 - (0.00649*h)
                 P = 101.29 * (((T+273.1)/288.08)**5.256)
-  
     #Dynamic Pressure Sim
         p = P/(0.2869*(T+273.1))
         Q = (p*(v**2))/2
     #Velocity Sim
         u = v
         v = (dt*g*((-Q/B)+math.sin(gam))) + v
-        L = 0/C
+        acel = abs((v-u)/dt)
+        if acel <= g:
+            dt = 0.2
+        elif acel > g:
+            dt = 0.1
     #Angle Sim
         gam = dt*((((-(Q*g)/B)*(L))+(math.cos(gam)*(g-((v**2)/(6371000+h)))))/v) + gam
     #Altitude Sim
@@ -57,10 +61,9 @@ while True:
         o = h
         z = ran
         y = v
-        if t > 0.1:
-            j = abs((v-u)/dt)
-        plt.xlim(0, 1000)
-        plt.ylim(0, 2000000)
+        j = acel
+        plt.xlim(0, t)
+        plt.ylim(0, ran+hi)
         plt.grid()
         plt.plot(x, z, marker="o", markersize=2, markeredgecolor="purple", markerfacecolor="purple")
         plt.plot(x, o, marker="o", markersize=2, markeredgecolor="blue", markerfacecolor="blue")
