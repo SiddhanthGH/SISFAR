@@ -1,6 +1,7 @@
 import time
 import math
 from matplotlib import pyplot as plt
+from matplotlib import patches as mpatches
 
 W = float(input("Weight of craft: "))
 C = float(input("Drag coefficient of craft: "))
@@ -64,6 +65,8 @@ while True:
         j = acel
         plt.xlim(0, t)
         plt.ylim(0, ran+hi)
+        plt.xlabel("time / s")
+        plt.ylabel("Downrange / m | Altitude / m | Velocity / ms^-1 | Acceleration / ms^-2")
         plt.grid()
         plt.plot(x, z, marker="o", markersize=2, markeredgecolor="purple", markerfacecolor="purple")
         plt.plot(x, o, marker="o", markersize=2, markeredgecolor="blue", markerfacecolor="blue")
@@ -71,14 +74,15 @@ while True:
         plt.plot(x, j, marker="o", markersize=2, markeredgecolor="green", markerfacecolor="green")
     #Off Check
         if v <= 7:
-            print("time (s): ", t)
-            print("velocity (m/s): ", v)
-            print("Downrange (km): ", ran/1000)
-            plt.show()
             break
         if h < 0.1:
-            print("time (s): ", t)
-            print("velocity (m/s): ", v)
-            print("Downrange (km): ", ran/1000)
-            plt.show()
             break
+plt.plot(x, z, marker="o", markersize=6, markeredgecolor="purple", markerfacecolor="purple", label="Downrange")
+plt.plot(x, o, marker="o", markersize=6, markeredgecolor="blue", markerfacecolor="blue", label="Altitude")
+plt.plot(x, y, marker="o", markersize=6, markeredgecolor="red", markerfacecolor="red", label="Velocity")
+plt.plot(x, j, marker="o", markersize=6, markeredgecolor="green", markerfacecolor="green", label="Acceleration")
+plt.legend()
+print("time (s): ", t)
+print("velocity (m/s): ", v)
+print("Downrange (km): ", ran/1000)
+plt.show()
