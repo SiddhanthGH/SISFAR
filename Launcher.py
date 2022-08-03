@@ -4,16 +4,17 @@ import sys
 from matplotlib import pyplot as plt
 import matplotlib.patches as mpatches
 
+
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
-        MainWindow.setObjectName("SISFAR")
+        MainWindow.setObjectName("MainWindow")
         MainWindow.resize(386, 470)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.pushButton = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton.setGeometry(QtCore.QRect(144, 390, 90, 30))
         self.pushButton.setObjectName("pushButton")
-        self.pushButton.clicked.connect(self.simulate)
+        self.pushButton.clicked.connect(self.clicked)
         self.M = QtWidgets.QTextEdit(self.centralwidget)
         self.M.setGeometry(QtCore.QRect(180, 90, 104, 21))
         self.M.setObjectName("M")
@@ -84,24 +85,26 @@ class Ui_MainWindow(object):
         font.setWeight(75)
         self.label.setFont(font)
         self.label.setObjectName("label")
+        self.Psel = QtWidgets.QComboBox(self.centralwidget)
+        self.Psel.setGeometry(QtCore.QRect(150, 60, 69, 22))
+        self.Psel.setObjectName("Psel")
+        self.Psel.addItem("")
+        self.Psel.addItem("")
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 386, 21))
         self.menubar.setObjectName("menubar")
-        self.menuEarth = QtWidgets.QMenu(self.menubar)
-        self.menuEarth.setObjectName("menuEarth")
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
         self.statusbar.setObjectName("statusbar")
         MainWindow.setStatusBar(self.statusbar)
-        self.menubar.addAction(self.menuEarth.menuAction())
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("SISFAR", "SISFAR"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.pushButton.setText(_translate("MainWindow", "Simulate"))
         self.lineEdit.setText(_translate("MainWindow", "Mass of craft:"))
         self.lineEdit_2.setText(_translate("MainWindow", "Drag Coefficient:"))
@@ -117,15 +120,23 @@ class Ui_MainWindow(object):
         self.rant.setText(_translate("MainWindow", "Downrange v Time"))
         self.rana.setText(_translate("MainWindow", "Downrange v Altitude"))
         self.label.setText(_translate("MainWindow", "SISFAR"))
-        self.menuEarth.setTitle(_translate("MainWindow", "Earth"))
-#Once Button Pressed
-    def simulate(self):
-        import SIScript as sis 
-        sis.Simulation(self)
+        self.Psel.setItemText(0, _translate("MainWindow", "Earth"))
+        self.Psel.setItemText(1, _translate("MainWindow", "Mars"))
 
-app = QtWidgets.QApplication(sys.argv)
-MainWindow = QtWidgets.QMainWindow()
-ui = Ui_MainWindow()
-ui.setupUi(MainWindow)
-MainWindow.show()
-sys.exit(app.exec_())
+    def clicked(self):
+        Psel = self.Psel.currentText()
+        if Psel == "Earth":
+            import EScript as sis 
+            sis.Simulation(self)
+        if Psel == "Mars":
+            import MScript as sis
+            sis.Simulation(self)
+
+if __name__ == "__main__":
+    import sys
+    app = QtWidgets.QApplication(sys.argv)
+    MainWindow = QtWidgets.QMainWindow()
+    ui = Ui_MainWindow()
+    ui.setupUi(MainWindow)
+    MainWindow.show()
+    sys.exit(app.exec_())
