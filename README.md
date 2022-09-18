@@ -1,7 +1,5 @@
 # SISFAR (Step-wise Integrator Solution For Atmospheric Reentry)
 
-CURRENTLY ONLY SUPPORTS EARTH ATMOSPHERIC ENTRY
-
 The program takes in initial orbital parameters and simulates, step by step, the trajectory of the spacecraft with those initial parameters through Earth's atmosphere, presenting the data in a graph post calculation.
 
 If running through python, the program requires PyQt5, math, matplotlib and sys (math and sys are built into python).
