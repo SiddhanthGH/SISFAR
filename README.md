@@ -3,11 +3,16 @@
 The program takes in initial orbital parameters and simulates, step by step, the trajectory of the spacecraft with those initial parameters through Earth's atmosphere, presenting the data in a graph post calculation.
 
 If running through python, the program requires PyQt5, math, matplotlib and sys (math and sys are built into python).
-When running through python simply double click on Launcher.py. Ensure that Launcher.py and SIScript are kept in the same folder.
+Simply double click on Launcher.py.
 
-The release build now comes in a folder with all the necessary prerequisites. If you do not have python, run the program through
-Launcher.exe. This is slower than running through Launcher.py as it adds 5 seconds to the boot up time.
+If you do not have python, run the program through Launcher.exe after downloading it from releases. This is slower than running through Launcher.py.
 
 -----------------------------------------------------------------------------------
 Mathematics used:
 https://engineering.purdue.edu/AAE450s/trajectories/Atmospheric%20Re-Entry.pdf
+
+Earth Atmospheric Model:
+https://www.grc.nasa.gov/www/k-12/airplane/atmosmet.html
+
+Mars Atmospheric Model:
+https://www.grc.nasa.gov/www/k-12/airplane/atmosmrm.html
