@@ -1,9 +1,5 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
-import math
 import sys
-from matplotlib import pyplot as plt
-import matplotlib.patches as mpatches
-
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -90,6 +86,7 @@ class Ui_MainWindow(object):
         self.Psel.setObjectName("Psel")
         self.Psel.addItem("")
         self.Psel.addItem("")
+        self.Psel.addItem("")
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 386, 21))
@@ -104,7 +101,7 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "SISFAR"))
         self.pushButton.setText(_translate("MainWindow", "Simulate"))
         self.lineEdit.setText(_translate("MainWindow", "Mass of craft:"))
         self.lineEdit_2.setText(_translate("MainWindow", "Drag Coefficient:"))
@@ -113,7 +110,7 @@ class Ui_MainWindow(object):
         self.lineEdit_5.setText(_translate("MainWindow", "Initial Velocity:"))
         self.lineEdit_6.setText(_translate("MainWindow", "Initial Altitude:"))
         self.lineEdit_8.setText(_translate("MainWindow", "Initial Angle:"))
-        self.At.setText(_translate("MainWindow", "All v Time"))
+        self.At.setText(_translate("MainWindow", "Single Figure"))
         self.Act.setText(_translate("MainWindow", "Acceleration v Time"))
         self.Vt.setText(_translate("MainWindow", "Velocity v Time"))
         self.ht.setText(_translate("MainWindow", "Altitude v Time"))
@@ -122,6 +119,7 @@ class Ui_MainWindow(object):
         self.label.setText(_translate("MainWindow", "SISFAR"))
         self.Psel.setItemText(0, _translate("MainWindow", "Earth"))
         self.Psel.setItemText(1, _translate("MainWindow", "Mars"))
+        self.Psel.setItemText(2, _translate("MainWindow", "Venus"))
 
     def clicked(self):
         Psel = self.Psel.currentText()
@@ -130,6 +128,9 @@ class Ui_MainWindow(object):
             sis.Simulation(self)
         if Psel == "Mars":
             import MScript as sis
+            sis.Simulation(self)
+        if Psel == "Venus":
+            import VScript as sis
             sis.Simulation(self)
 
 if __name__ == "__main__":

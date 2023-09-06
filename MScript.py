@@ -1,99 +1,143 @@
 import math
-import time
 from matplotlib import pyplot as plt
-import matplotlib.patches as mpatches
 
 def Simulation(self):
-    #Collects vars
-     M = float(self.M.toPlainText())
-     C = float(self.C.toPlainText())
-     A = float(self.A.toPlainText())
-     Li = float(self.L.toPlainText())
-     h = float(self.h.toPlainText())
-     v = float(self.v.toPlainText())
-     gam = float(self.gam.toPlainText())
-     gam = (gam*(math.pi/180))
-     At = self.At.checkState()
-     Act = self.Act.checkState()
-     Vt = self.Vt.checkState()
-     ht = self.ht.checkState()
-     rant = self.rant.checkState()
-     rana = self.rana.checkState()
-    #Necessary Preliminary Calculations
-     W = M*3.721
-     L = Li/C
-     B = W/(C*A)
-     hi = h
-     g = 3.721
-     dt = 0.1
+    #Get Variables
+    mass = float(self.M.toPlainText())
+    drag_coef = float(self.C.toPlainText())
+    surface_area = float(self.A.toPlainText())
+    lift_coef = float(self.L.toPlainText())
+    initial_alt = float(self.h.toPlainText())
+    initial_vel = float(self.v.toPlainText())
+    initial_angle = math.radians(float(self.gam.toPlainText()))
 
-     t = 0
-     ran = 0
-     n = 0
-    #SIMULATION
-     plt.rcParams["figure.figsize"] = [14.00, 8.00]
-     plt.rcParams["figure.autolayout"] = True
-     while h > 0.1:
-            #Clock
-                t = t + dt
-                n = n + 1
-                x = t
-            #Atmos Sim
-                if h > 7000:
-                    T = -23.4 - (0.00222*h)
-                    P = 0.699 * (math.e**(-0.00009*h))
-                elif h <= 7000:
-                    T = -31 - (0.000998*h)
-                    P = 0.699 * (math.e**(-0.00009*h))
-            #Dynamic Pressure Sim
-                p = P/(0.1921*(T+273.1))
-                Q = (p*(v**2))/2
-            #Velocity Sim
-                u = v
-                v = (dt*g*((-Q/B)+math.sin(gam))) + v
-                acel = abs((v-u)/dt)
-                if acel <= g:
-                    dt = 0.2
-                elif acel > g:
-                    dt = 0.1
-            #Angle Sim
-                gam = dt*((((-(Q*g)/B)*(L))+(math.cos(gam)*(g-((v**2)/(3389500+h)))))/v) + gam
-            #Altitude Sim
-                h = dt*(-v)*math.sin(gam) + h
-                print(h)
-            #Range Sim
-                ran = dt*((3389500*v*math.cos(gam))/(3389500+h)) + ran
-            #Graphics
-                o = h
-                z = ran
-                y = v
-                j = acel
-                if n%2 == 0:
-                    #Check Graph State
-                    if At + rant >= 2:
-                        plt.plot(x, z, marker="o", markersize=1, markeredgecolor="purple", markerfacecolor="purple")
-                    if At + ht >= 2:
-                        plt.plot(x, o, marker="o", markersize=1, markeredgecolor="blue", markerfacecolor="blue")
-                    if At + Vt >= 2:
-                        plt.plot(x, y, marker="o", markersize=1, markeredgecolor="red", markerfacecolor="red")
-                    if At + Act >= 2:
-                        plt.plot(x, j, marker="o", markersize=1, markeredgecolor="green", markerfacecolor="green")
-                    if rana == 2:
-                        plt.plot(o, z, marker="o", markersize=1, markeredgecolor="purple", markerfacecolor="purple")
-     #Plot Graph
-     plt.xlim()
-     plt.ylim()
-     plt.xlabel("time / s")
-     plt.ylabel("Downrange / m | Altitude / m | Velocity / ms^-1 | Acceleration / ms^-2")
-     plt.grid()
-     #Add Legend
-     red_patch = mpatches.Patch(color='red', label='Velocity')
-     blue_patch = mpatches.Patch(color='blue', label='Altitude')
-     green_patch = mpatches.Patch(color='green', label='Acceleration')
-     purple_patch = mpatches.Patch(color='purple', label='Downrange')
-     plt.legend(handles=[red_patch, blue_patch, green_patch, purple_patch])
-     #Print Final Data
-     print("time (s): ", t)
-     print("velocity (m/s): ", v)
-     print("Downrange (km): ", ran/1000)
-     plt.show()
+    #Check states
+    At = self.At.checkState()
+    Act = self.Act.checkState()
+    Vt = self.Vt.checkState()
+    ht = self.ht.checkState()
+    rant = self.rant.checkState()
+    rana = self.rana.checkState()
+
+    #Preliminary Calculations
+    gravity_accel = 3.72
+    weight = mass*gravity_accel
+    lift = lift_coef/drag_coef
+    bal_coef = weight/(drag_coef*surface_area)
+    dt = 0.1
+
+    t = 0
+    time = [0]
+    range = [0]
+    alt = [initial_alt]
+    vel = [initial_vel]
+    accel = [0]
+    AoA = [initial_angle]
+    curr_alt = initial_alt
+    curr_vel = initial_vel
+    curr_angle = initial_angle
+    curr_range = 0
+
+    plt.rcParams["figure.figsize"] = [14.00, 8.00]
+    plt.rcParams["figure.autolayout"] = True
+
+    while curr_alt >= 0.1 :
+        #Clock
+        t = t + dt
+        time.append(t)
+
+        #Atmos Sim
+        if curr_alt > 7000:
+            T = -23.4 - (0.00222*curr_alt)
+            P = 0.699 * (math.e**(-0.00009*curr_alt))
+        elif curr_alt <= 7000:
+            T = -31 - (0.000998*curr_alt)
+            P = 0.699 * (math.e**(-0.00009*curr_alt))
+        #Dynamic Pressure Sim
+        p = P/(0.1921*(T+273.1))
+        Q = (p*(curr_vel**2))/2
+        #Velocity Sim
+        past_vel = curr_vel
+        curr_vel = (dt*gravity_accel*((-Q/bal_coef)+math.sin(initial_angle))) + past_vel
+        vel.append(curr_vel)
+        curr_accel = (curr_vel-past_vel)/dt
+        accel.append(curr_accel)
+        #Angle Sim
+        past_angle = curr_angle
+        curr_angle = dt*((((-(Q*gravity_accel)/bal_coef)*(lift))+(math.cos(curr_angle)*(gravity_accel-((curr_vel**2)/(3389500+curr_alt)))))/curr_vel) + past_angle
+        AoA.append(math.degrees(curr_angle))
+        #Altitude Sim
+        past_alt = curr_alt
+        curr_alt = dt*(-curr_vel)*math.sin(curr_angle) + past_alt
+        alt.append(curr_alt)
+        #Range Sim
+        past_range = curr_range
+        curr_range = dt*((3389500*curr_vel*math.cos(curr_angle))/(3389500+curr_alt)) + past_range
+        range.append(curr_range)
+
+    if At == 2:
+        plt.subplot(2, 3, 6)
+        plt.plot(time,AoA,color='yellow')
+        plt.xlabel("time / s")
+        plt.ylabel("AoA / deg")
+        plt.grid()   
+        if rant == 2:
+            plt.subplot(2, 3, 1)
+            plt.plot(time,range, color = 'purple')
+            plt.xlabel("time / s")
+            plt.ylabel("Downrange / m")
+            plt.grid()
+        if ht == 2:
+            plt.subplot(2, 3, 2)
+            plt.plot(time,alt, color = 'blue')
+            plt.xlabel("time / s")
+            plt.ylabel("Altitude / m")
+            plt.grid()    
+        if Vt == 2:
+            plt.subplot(2, 3, 3)
+            plt.plot(time, vel, color='red')
+            plt.xlabel("time / s")
+            plt.ylabel("Velocity / ms^-1")
+            plt.grid()
+        if Act == 2:
+            plt.subplot(2, 3, 4)
+            plt.plot(time,accel, color='green')
+            plt.xlabel("time / s")
+            plt.ylabel("acceleration / ms^-2")
+            plt.grid()
+        if rana == 2:
+           plt.subplot(2, 3, 5)
+           plt.plot(range,alt,color='purple')
+           plt.xlabel("Downrange / m")
+           plt.ylabel("Altitude / m")
+           plt.grid()
+    else:
+        if rant == 2:
+            plt.plot(time,range, color = 'purple')
+            plt.xlabel("time / s")
+            plt.ylabel("Downrange / m")
+            plt.grid()
+        if ht == 2:
+            plt.plot(time,alt, color = 'blue')
+            plt.xlabel("time / s")
+            plt.ylabel("Altitude / m")
+            plt.grid()    
+        if Vt == 2:
+            plt.plot(time, vel, color='red')
+            plt.xlabel("time / s")
+            plt.ylabel("Velocity / ms^-1")
+            plt.grid()
+        if Act == 2:
+            plt.plot(time,accel, color='green')
+            plt.xlabel("time / s")
+            plt.ylabel("acceleration / ms^-2")
+            plt.grid()
+        if rana == 2:
+           plt.plot(range,alt,color='purple')
+           plt.xlabel("Downrange / m")
+           plt.ylabel("Altitude / m")
+           plt.grid()
+
+    plt.xlim()
+    plt.ylim()
+    plt.show()
