@@ -20,7 +20,7 @@ def Simulation(self):
     rana = self.rana.checkState()
 
     #Preliminary Calculations
-    gravity_accel = 3.72
+    gravity_accel = 8.87
     weight = mass*gravity_accel
     lift = lift_coef/drag_coef
     bal_coef = weight/(drag_coef*surface_area)
