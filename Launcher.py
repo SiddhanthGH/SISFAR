@@ -87,6 +87,7 @@ class Ui_MainWindow(object):
         self.Psel.addItem("")
         self.Psel.addItem("")
         self.Psel.addItem("")
+        self.Psel.addItem("")
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 386, 21))
@@ -120,6 +121,7 @@ class Ui_MainWindow(object):
         self.Psel.setItemText(0, _translate("MainWindow", "Earth"))
         self.Psel.setItemText(1, _translate("MainWindow", "Mars"))
         self.Psel.setItemText(2, _translate("MainWindow", "Venus"))
+        self.Psel.setItemText(3, _translate("MainWindow", "Titan"))
 
     def clicked(self):
         Psel = self.Psel.currentText()
@@ -131,6 +133,9 @@ class Ui_MainWindow(object):
             sis.Simulation(self)
         if Psel == "Venus":
             import VScript as sis
+            sis.Simulation(self)
+        if Psel == "Titan":
+            import TScript as sis
             sis.Simulation(self)
 
 if __name__ == "__main__":
