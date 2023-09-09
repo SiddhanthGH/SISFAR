@@ -20,4 +20,7 @@ https://www.grc.nasa.gov/www/k-12/airplane/atmosmrm.html
 Venus Atmospheric Model:
 https://ntrs.nasa.gov/api/citations/19690011554/downloads/19690011554.pdf
 
+Titan Atmospheric Model (Huygens Data):
+https://atmos.nmsu.edu/PDS/data/hphasi_0001/DATA/PROFILES/
+
 **NOTE** The Venus atmospheric model was made in 1968, before actual surveying of its atmosphere began. It is a projection based off Mariner 5 and Venera 4 data.
