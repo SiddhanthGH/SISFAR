@@ -1,5 +1,4 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
-import sys
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -126,18 +125,35 @@ class Ui_MainWindow(object):
     def clicked(self):
         Psel = self.Psel.currentText()
         if Psel == "Earth":
-            import EScript as sis 
-            sis.Simulation(self)
+            import EScript
+            EScript.Simulation(self)
         if Psel == "Mars":
-            import MScript as sis
-            sis.Simulation(self)
+            import MScript
+            MScript.Simulation(self)
         if Psel == "Venus":
-            import VScript as sis
-            sis.Simulation(self)
+            import VScript
+            VScript.Simulation(self)
         if Psel == "Titan":
-            import TScript as sis
-            sis.Simulation(self)
+            import TScript
+            TScript.Simulation(self)
+    
+    def restart():
+        import sys
+        QtCore.QCoreApplication.quit()
+        status = QtCore.QProcess.startDetached(sys.executable, sys.argv)
 
+    def err0():
+        err = QtWidgets.QMessageBox()
+        err.setWindowTitle('Error 0')
+        err.setText('Error 0: Fill all required fields with appropriate characters!')
+        show = err.exec_()
+
+    def err1():
+        err = QtWidgets.QMessageBox()
+        err.setWindowTitle('Error 1')
+        err.setText('Error 1: Ensure at least 1 plotting option is selected!')
+        show = err.exec_()
+    
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
