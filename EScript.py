@@ -34,7 +34,7 @@ def Simulation(self):
         import Launcher
         Launcher.Ui_MainWindow.err1()
         Launcher.Ui_MainWindow.restart()
-
+        exit()
     #Preliminary Calculations
     gravity_accel = 9.81
     weight = mass*gravity_accel
