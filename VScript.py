@@ -3,14 +3,19 @@ from matplotlib import pyplot as plt
 
 def Simulation(self):
     #Get Variables
-    mass = float(self.M.toPlainText())
-    drag_coef = float(self.C.toPlainText())
-    surface_area = float(self.A.toPlainText())
-    lift_coef = float(self.L.toPlainText())
-    initial_alt = float(self.h.toPlainText())
-    initial_vel = float(self.v.toPlainText())
-    initial_angle = math.radians(float(self.gam.toPlainText()))
-
+    try:
+        mass = float(self.M.toPlainText())
+        drag_coef = float(self.C.toPlainText())
+        surface_area = float(self.A.toPlainText())
+        lift_coef = float(self.L.toPlainText())
+        initial_alt = float(self.h.toPlainText())
+        initial_vel = float(self.v.toPlainText())
+        initial_angle = math.radians(float(self.gam.toPlainText()))
+    except ValueError:
+        import Launcher
+        Launcher.Ui_MainWindow.err0()
+        Launcher.Ui_MainWindow.restart()
+        exit()
     #Check states
     At = self.At.checkState()
     Act = self.Act.checkState()
@@ -18,7 +23,16 @@ def Simulation(self):
     ht = self.ht.checkState()
     rant = self.rant.checkState()
     rana = self.rana.checkState()
-
+    err1 = [At,Act,Vt,ht,rant,rana]
+    ii = 0
+    for i in range(6):
+        if err1[i] == 0:
+            ii += 1
+    if ii == 6 or (ii == 5 and At == 2):
+        import Launcher
+        Launcher.Ui_MainWindow.err1()
+        Launcher.Ui_MainWindow.restart()
+        exit()
     #Preliminary Calculations
     gravity_accel = 8.87
     weight = mass*gravity_accel
@@ -28,7 +42,7 @@ def Simulation(self):
 
     t = 0
     time = [0]
-    range = [0]
+    down = [0]
     alt = [initial_alt]
     vel = [initial_vel]
     accel = [0]
@@ -126,7 +140,7 @@ def Simulation(self):
         #Range Sim
         past_range = curr_range
         curr_range = dt*((6051800*curr_vel*math.cos(curr_angle))/(6051800+curr_alt)) + past_range
-        range.append(curr_range)
+        down.append(curr_range)
 
     if At == 2:
         plt.subplot(2, 3, 6)
@@ -136,7 +150,7 @@ def Simulation(self):
         plt.grid()   
         if rant == 2:
             plt.subplot(2, 3, 1)
-            plt.plot(time,range, color = 'purple')
+            plt.plot(time,down, color = 'purple')
             plt.xlabel("time / s")
             plt.ylabel("Downrange / m")
             plt.grid()
@@ -160,13 +174,13 @@ def Simulation(self):
             plt.grid()
         if rana == 2:
            plt.subplot(2, 3, 5)
-           plt.plot(range,alt,color='purple')
+           plt.plot(down,alt,color='purple')
            plt.xlabel("Downrange / m")
            plt.ylabel("Altitude / m")
            plt.grid()
     else:
         if rant == 2:
-            plt.plot(time,range, color = 'purple')
+            plt.plot(time,down, color = 'purple')
             plt.xlabel("time / s")
             plt.ylabel("Downrange / m")
             plt.grid()
@@ -186,7 +200,7 @@ def Simulation(self):
             plt.ylabel("acceleration / ms^-2")
             plt.grid()
         if rana == 2:
-           plt.plot(range,alt,color='purple')
+           plt.plot(down,alt,color='purple')
            plt.xlabel("Downrange / m")
            plt.ylabel("Altitude / m")
            plt.grid()
