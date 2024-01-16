@@ -142,17 +142,19 @@ class Ui_MainWindow(object):
         QtCore.QCoreApplication.quit()
         status = QtCore.QProcess.startDetached(sys.executable, sys.argv)
 
-    def err0():
-        err = QtWidgets.QMessageBox()
-        err.setWindowTitle('Error 0')
-        err.setText('Error 0: Fill all required fields with appropriate characters!')
-        show = err.exec_()
-
-    def err1():
-        err = QtWidgets.QMessageBox()
-        err.setWindowTitle('Error 1')
-        err.setText('Error 1: Ensure at least 1 plotting option is selected!')
-        show = err.exec_()
+    def err(mode):
+        match mode:
+            case 0:
+                err = QtWidgets.QMessageBox()
+                err.setWindowTitle('Error 0')
+                err.setText('Error 0: Fill all required fields with appropriate characters!')
+                show = err.exec_()
+            case 1:
+                err = QtWidgets.QMessageBox()
+                err.setWindowTitle('Error 1')
+                err.setText('Error 1: Ensure at least 1 plotting option is selected!')
+                show = err.exec_()
+        
     
 if __name__ == "__main__":
     import sys

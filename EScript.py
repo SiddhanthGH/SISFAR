@@ -13,7 +13,7 @@ def Simulation(self):
         initial_angle = math.radians(float(self.gam.toPlainText()))
     except ValueError:
         import Launcher
-        Launcher.Ui_MainWindow.err0()
+        Launcher.Ui_MainWindow.err(0)
         Launcher.Ui_MainWindow.restart()
         exit()
 
@@ -32,7 +32,7 @@ def Simulation(self):
             ii += 1
     if ii == 6 or (ii == 5 and At == 2):
         import Launcher
-        Launcher.Ui_MainWindow.err1()
+        Launcher.Ui_MainWindow.err(1)
         Launcher.Ui_MainWindow.restart()
         exit()
     #Preliminary Calculations
